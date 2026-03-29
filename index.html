@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор накоплений</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #121212, #1f1f1f);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #ffb400;
+      font-size: 28px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #cccccc;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #2c2c2c;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      box-shadow: 0 0 0 2px #ffb400;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #ffb400;
+      color: black;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: #ffc533;
+    }
+
+    .result {
+      margin-top: 25px;
+      background: #2a2a2a;
+      border-radius: 15px;
+      padding: 20px;
+      display: none;
+    }
+
+    .result h2 {
+      color: #ffb400;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+
+    .result-item {
+      margin-bottom: 10px;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .highlight {
+      color: #4ade80;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Калькулятор накоплений</h1>
+
+    <div class="field">
+      <label>Сколько нужно накопить</label>
+      <input type="number" id="amount" placeholder="Например: 100000">
+    </div>
+
+    <div class="field">
+      <label>Через сколько времени</label>
+      <input type="number" id="time" placeholder="Например: 12">
+    </div>
+
+    <div class="field">
+      <label>Единица времени</label>
+      <select id="timeType">
+        <option value="days">Дни</option>
+        <option value="weeks">Недели</option>
+        <option value="months">Месяцы</option>
+        <option value="years">Годы</option>
+      </select>
+    </div>
+
+    <button onclick="calculateSavings()">Рассчитать</button>
+
+    <div class="result" id="result">
+      <h2>Результат</h2>
+      <div class="result-item" id="monthlyResult"></div>
+      <div class="result-item" id="weeklyResult"></div>
+      <div class="result-item" id="dailyResult"></div>
+      <div class="result-item" id="hour2Result"></div>
+      <div class="result-item" id="hour4Result"></div>
+      <div class="result-item" id="hour8Result"></div>
+    </div>
+  </div>
+
+  <script>
+    function calculateSavings() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const time = parseFloat(document.getElementById('time').value);
+      const timeType = document.getElementById('timeType').value;
+
+      if (!amount || !time || amount <= 0 || time <= 0) {
+        alert('Введите корректные значения');
+        return;
+      }
+
+      let months;
+
+      if (timeType === 'years') {
+        months = time * 12;
+      } else if (timeType === 'months') {
+        months = time;
+      } else if (timeType === 'weeks') {
+        months = time / 4.345;
+      } else if (timeType === 'days') {
+        months = time / 30.44;
+      }
+
+      const monthly = amount / months;
+      const weekly = amount / (months * 4.345);
+      const daily = amount / (months * 30.44);
+
+      const hour2 = daily / 2;
+      const hour4 = daily / 4;
+      const hour8 = daily / 8;
+
+      document.getElementById('monthlyResult').innerHTML =
+        `<span class="highlight">${monthly.toFixed(2)}</span> : Нужно откладывать в месяц`;
+
+      document.getElementById('weeklyResult').innerHTML =
+        `<span class="highlight">${weekly.toFixed(2)}</span> : Нужно откладывать в неделю`;
+
+      document.getElementById('dailyResult').innerHTML =
+        `<span class="highlight">${daily.toFixed(2)}</span> : Нужно откладывать в день`;
+
+      document.getElementById('hour2Result').innerHTML =
+        `<span class="highlight">${hour2.toFixed(2)}</span> : 2 часа в день, в час`;
+
+      document.getElementById('hour4Result').innerHTML =
+        `<span class="highlight">${hour4.toFixed(2)}</span> : 4 часа в день, в час`;
+
+      document.getElementById('hour8Result').innerHTML =
+        `<span class="highlight">${hour8.toFixed(2)}</span> : 8 часов в день, в час`;
+
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
